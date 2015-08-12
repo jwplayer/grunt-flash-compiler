@@ -1,6 +1,6 @@
 {
   "name": "grunt-flash-compiler",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Compile your ActionScript using flex or Air!",
   "main": "index.js",
   "scripts": {
