@@ -1,26 +1,38 @@
 # grunt-flash-compiler
 
-Grunt mutitask to compile Flash swf and swc files using AIR or FLEX SDK libraries
+Grunt multitask to compile Flash swf and swc files using AIR or FLEX SDK libraries
 
 
 ### Options
-* compilerLibraryPath: string
-* externalLibraryPath: string
-* ascshdPort: number
-* debug: Boolean
+* taskCompilerOptions: array<String> - Extra options to be added to all compilations
+* targetCompilerOptions: array<String> - Extra options to be added to a specific compilation
+* debug: Boolean - enable debugging options for compiled object
+* swc: Boolean - when true, generate a swc library file for linking
+* ascshdPort: number - when using ascshd, each project should use a different port
 
+### Example
 ```js
-{
-  flash: {
-    debug: {
-      options: {
-        debug:true,
-        ascshdPort: 11111
-      },
-      files: {
-        'destination/file.swf' : 'main/source/file.as'
-      }
+flash: {
+    options: {
+        targetCompilerOptions : [
+            '-compiler.library-path+='+ 'libs',
+            '-define+=JWPLAYER::version,\'' + projects.version + '\''
+        ],
+        sdk: env.FLEX_HOME,
+        ascshdPort: 11124
+    },
+    debug : {
+        options : {
+            debug : true,
+        },
+        files : {
+            'test/output.swf' : 'src/file.as'
+        }
+    },
+    release : {
+        files : {
+            'bin/output.swf' : 'src/file.as'
+        }
     }
-  }
 }
 ```

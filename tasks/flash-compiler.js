@@ -62,7 +62,7 @@ function executeCmd(grunt, command, done) {
 
 module.exports = function(grunt) {
 
-    var description = 'Compile Flash SWF files. Usage `grunt flash:player:debug|release|swc:air|flex`';
+    var description = 'Compile Flash SWF files';
     grunt.registerMultiTask('flash', description, function() {
 
         var task = this;
@@ -93,30 +93,35 @@ module.exports = function(grunt) {
     function generateArgs(options) {
         var arr = [
             '-compiler.source-path=src/flash',
-                '-compiler.library-path+=' + options.sdk + '/frameworks/libs',
+            '-compiler.library-path+=' + options.sdk + '/frameworks/libs',
             '-default-background-color=0x000000',
             '-default-frame-rate=30',
-                '-target-player=' + options.flashVersion,
-                '-swf-version=' + options.swfTarget,
-            '-use-network=true',
-                '-define+=JWPLAYER::version,\'' + options.buildVersion + '\''
+            '-target-player=' + options.flashVersion,
+            '-swf-version=' + options.swfTarget,
+            '-use-network=true'
         ];
 
-        if (options.compilerLibraryPath) {
+        // Framework specific optimizations
+        var isFlex = /flex/.test(options.sdk);
+        if (isFlex) {
             arr.push(
-                    '-compiler.library-path+='+ options.compilerLibraryPath
+                '-static-link-runtime-shared-libraries=true'
+            );
+        } else {
+            arr.push(
+                '-show-multiple-definition-warnings=true',
+                '-compiler.inline=true',
+                '-compiler.remove-dead-code=true'
             );
         }
-        if (options.externalLibraryPath) {
-            arr.push(
-                    '-external-library-path+=' + options.externalLibraryPath
-            );
+
+        if (options.targetCompilerOptions) {
+            arr = arr.concat(options.targetCompilerOptions);
         }
-        if (options.extraSourcePath) {
-            arr.push(
-                    '-compiler.source-path+=' + options.extraSourcePath
-            );
+        if (options.taskCompilerOptions) {
+            arr = arr.concat(options.taskCompilerOptions);
         }
+
         return arr;
     }
 
@@ -131,16 +136,12 @@ module.exports = function(grunt) {
         var command = {
             cmd: options.sdk + '/bin/compc',
             args: args.concat(
-                    '-output=' + dest,
-                    '-include-sources=' + src,
-                '-show-multiple-definition-warnings=true',
-                '-compiler.inline=true',
-                '-compiler.remove-dead-code=true',
+                '-output=' + dest,
+                '-include-sources=' + src,
                 '-optimize=true',
                 '-omit-trace-statements=true',
                 '-warnings=false',
-                '-define+=CONFIG::debugging,false',
-                '-define+=CONFIG::staging,false'
+                '-define+=CONFIG::debugging,false'
             )
         };
 
@@ -154,7 +155,7 @@ module.exports = function(grunt) {
         var command = {
             cmd: options.sdk + '/bin/mxmlc',
             args: args.concat(
-                    '-output=' + dest,
+                '-output=' + dest,
                 src
             )
         };
@@ -173,37 +174,22 @@ module.exports = function(grunt) {
         }
 
 
-        // Framework specific optimizations
-        var isFlex = /flex/.test(options.sdk);
-        if (isFlex) {
-            command.args.push(
-                '-static-link-runtime-shared-libraries=true'
-            );
-        } else {
-            command.args.push(
-                '-show-multiple-definition-warnings=true',
-                '-compiler.inline=true',
-                '-compiler.remove-dead-code=true'
-            );
-        }
 
 
         if (options.debug) {
             command.args.push(
-                    '-link-report=' + dest.slice(0, -4) + 'link.xml',
-                    '-size-report=' + dest.slice(0, -4) + 'size.xml',
+                '-link-report=' + dest.slice(0, -4) + 'link.xml',
+                '-size-report=' + dest.slice(0, -4) + 'size.xml',
                 '-strict=true',
                 '-debug=true',
-                '-define+=CONFIG::debugging,true',
-                '-define+=CONFIG::staging,true'
+                '-define+=CONFIG::debugging,true'
             );
         } else {
             command.args.push(
                 '-optimize=true',
                 '-omit-trace-statements=true',
                 '-warnings=false',
-                '-define+=CONFIG::debugging,false',
-                '-define+=CONFIG::staging,false'
+                '-define+=CONFIG::debugging,false'
             );
         }
 
