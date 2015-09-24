@@ -1,4 +1,5 @@
 var fs = require('fs');
+var os = require('os');
 var env = process.env;
 
 /*
@@ -61,6 +62,12 @@ function executeCmd(grunt, command, done) {
 }
 
 module.exports = function(grunt) {
+
+    var isWindows = (os.platform() === 'win32');
+    function bin(str) {
+        var suffix = isWindows ? '.bat' : '';
+        return '/bin/' + str + suffix;
+    }
 
     var description = 'Compile Flash SWF files';
     grunt.registerMultiTask('flash', description, function() {
@@ -134,7 +141,7 @@ module.exports = function(grunt) {
         var args = generateArgs(options);
 
         var command = {
-            cmd: options.sdk + '/bin/compc',
+            cmd: options.sdk + bin('compc'),
             args: args.concat(
                 '-output=' + dest,
                 '-include-sources=' + src,
@@ -153,7 +160,7 @@ module.exports = function(grunt) {
 
         var args = generateArgs(options);
         var command = {
-            cmd: options.sdk + '/bin/mxmlc',
+            cmd: options.sdk + bin('mxmlc'),
             args: args.concat(
                 '-output=' + dest,
                 src
@@ -163,7 +170,7 @@ module.exports = function(grunt) {
         var isAir = /air/.test(options.sdk.toLowerCase());
         if (isAir) {
             // ActionScript Compiler 2.0 Shell https://github.com/jcward/ascsh
-            var ascshd = fs.existsSync(options.sdk + '/bin/ascshd');
+            var ascshd = fs.existsSync(options.sdk + bin('ascshd'));
             if (ascshd) {
                 command.cmd = command.cmd.replace('bin/mxmlc', 'bin/ascshd');
                 command.args.unshift(
