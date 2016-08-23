@@ -15,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/jwplayer/grunt-flash-compiler/issues"
   },
-  "homepage": "https://github.com/jwplayer/grunt-flash-compiler",
-  "dependencies": {
-    "fs": "0.0.2"
-  }
+  "homepage": "https://github.com/jwplayer/grunt-flash-compiler"
 }
