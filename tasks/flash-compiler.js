@@ -5,12 +5,6 @@ var env = process.env;
 /*
  "SWF Version" | "Flash Player Version"
  ========================================
- 9       |          9
- 10       |      10.0, 10.1
- 11       |         10.2
- 12       |         10.3
- 13       |         11.0
- 14       |         11.1
  15       |         11.2
  16       |         11.3
  17       |         11.4
@@ -25,6 +19,7 @@ var env = process.env;
  26       |         15.0
  27       |         16.0
  28       |         17.0
+ 29       |         18.0
  Src: http://sleepydesign.blogspot.com/2012/04/flash-swf-version-meaning.html
  */
 function executeCmd(grunt, command, done) {
@@ -75,9 +70,9 @@ module.exports = function(grunt) {
         var task = this;
 
         var options = this.options({
-            flashVersion: 16,
-            swfTarget: 27,
             sdk: env.FLEX_HOME
+            flashVersion: '15.0',
+            swfTarget: 26,
         });
 
         // A common failure is forgetting so set an environment variable
