@@ -1,5 +1,6 @@
 var fs = require('fs');
 var os = require('os');
+var flexSDK = require('flex-sdk');
 var env = process.env;
 
 /*
@@ -70,16 +71,10 @@ module.exports = function(grunt) {
         var task = this;
 
         var options = this.options({
-            sdk: env.FLEX_HOME
             flashVersion: '15.0',
             swfTarget: 26,
+            sdk: flexSDK.FLEX_HOME
         });
-
-        // A common failure is forgetting so set an environment variable
-        if (!options.sdk) {
-            grunt.fail.warn('To compile ActionScript, you must set environment ' +
-                'variable $AIR_HOME or $FLEX_HOME for this task to locate mxmlc.');
-        }
 
         this.files.forEach(function(file) {
             // If a flag tells us to build the library file
