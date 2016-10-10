@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/jwplayer/grunt-flash-compiler",
   "dependencies": {
-    "flex-sdk": "^4.6.0-0"
+    "flex-sdk": "4.6.0"
   }
 }
