@@ -91,6 +91,7 @@ module.exports = function(grunt) {
         var arr = [
             '-compiler.source-path=src/flash',
             '-compiler.library-path+=' + options.sdk + '/frameworks/libs',
+            '-compiler.external-library-path=' + options.sdk + '/frameworks/libs/player/' + options.flashVersion + '/playerglobal.swc',
             '-default-background-color=0x000000',
             '-default-frame-rate=30',
             '-target-player=' + options.flashVersion,
