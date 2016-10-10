@@ -1,6 +1,6 @@
 var fs = require('fs');
 var os = require('os');
-var flexSDK = require('flex-sdk');
+var flexSDK = require('jwplayer-flex-sdk');
 var env = process.env;
 
 /*
