@@ -71,8 +71,8 @@ module.exports = function(grunt) {
         var task = this;
 
         var options = this.options({
-            flashVersion: '15.0',
-            swfTarget: 26,
+            flashVersion: '11.2',
+            swfTarget: 15,
             sdk: flexSDK.FLEX_HOME
         });
 
